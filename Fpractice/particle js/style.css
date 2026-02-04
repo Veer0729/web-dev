@@ -1,0 +1,82 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f1f1f1;
+  color: #222;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* particles background */
+#particles-js {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+/* layout */
+main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.gallery {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+/* scattered images */
+.gallery img {
+  position: absolute;
+  width: 260px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+/* example positions – tweak as you like */
+.gallery img:nth-child(1) {
+  top: 10%;
+  left: 12%;
+}
+.gallery img:nth-child(2) {
+  top: 20%;
+  right: 10%;
+}
+.gallery img:nth-child(3) {
+  top: 50%;
+  left: 20%;
+}
+.gallery img:nth-child(4) {
+  top: 60%;
+  right: 15%;
+}
+.gallery img:nth-child(5) {
+  top: 30%;
+  left: 50%;
+}
+
+/* responsive */
+@media (max-width: 768px) {
+  .gallery img {
+    width: 180px;
+  }
+}
