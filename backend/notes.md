@@ -12,3 +12,5 @@ PATCH => when we want to update the data in the server
 DELETE => delete the data in the server
 
 *npm nodemon server.js*: automatically starts our server on any update
+
+*npm i mongoose*: for server connection with mongodb

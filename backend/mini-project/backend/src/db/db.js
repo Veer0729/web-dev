@@ -1,10 +1,9 @@
-const mongoose = require("mongoose");
 require("dotenv").config()
-
+const mongoose = require("mongoose")
 
 async function connectDB() {
     await mongoose.connect(process.env.MONGODB_URI)
-    // await means to wait until db is connected
+
     console.log("connected to db")
 }
 
