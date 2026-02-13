@@ -2,8 +2,10 @@ const express = require("express")
 const multer = require("multer") // middleware used to handle file uploads (images, PDFs, videos, etc.)
 const uploadFile = require("./services/storage.services")
 const postModel = require("./models/post.models")
+const cors = require("cors")
 
 const app = express();
+app.use(cors())
 app.use(express.json())
 
 const upload = multer({storage: multer.memoryStorage()})
