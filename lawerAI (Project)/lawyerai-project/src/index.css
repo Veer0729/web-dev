@@ -1,0 +1,405 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+}
+
+#main {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: black;
+}
+
+/* Your text block */
+.heroContent {
+  position: relative;
+  /* Keeps text above bg */
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+  color: rgb(255, 255, 255);
+}
+
+.heroContent h1 {
+  font-size: 6.5vw;
+  line-height: 1.1;
+  font-weight: 500;
+  font-family: "Newsreader", serif;
+  margin-bottom: 8px;
+}
+
+.italic {
+  color: #EF4444;
+}
+
+.heroContent p {
+  font-size: 1.7vw;
+  font-family: 'Fira Code', monospace;
+  width: 80%;
+  font-weight: 200;
+  width: 80%;
+  margin: 0 auto;
+  /*THIS centers the paragraph block*/
+  color: #ffffff;
+  letter-spacing: -0.08em;
+  margin-bottom: 16px;
+}
+
+.heroImage {
+  position: absolute;
+  /* Take image out of layout */
+  inset: 0;
+  /* Top, right, bottom, left = 0 */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Cover screen properly */
+  z-index: 0;
+  /* Stay behind text */
+  overflow: hidden;
+  opacity: 0.5
+}
+
+.img {
+  height: 100%;
+  width: 100%;
+  transform: scale(1.09);
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  padding: 1.2rem 0;
+  width: auto;
+}
+
+.navbar button {
+  font-size: 1.05rem;
+  margin: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  padding: 0.5rem 1rem;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 0.03em;
+}
+
+.navbar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0.6rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50px;
+  backdrop-filter: blur(12px);
+}
+
+.navbar li {
+  position: relative;
+}
+
+.buttons {
+  display: flex;
+  gap: 20px;
+  /* Space between buttons */
+  margin-top: 20px;
+}
+
+.buttons button {
+  padding: 12px 30px;
+  font-size: 1.3rem;
+  font-family: 'Space Mono', monospace;
+  background: transparent;
+  color: #FFFFFF;
+  border: 2px solid #FFFFFF;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 400;
+}
+
+.buttons button:hover {
+  background: #FFFFFF;
+  color: #000000;
+}
+
+#second-page {
+  background-color: #000000;
+  background-image:
+    repeating-linear-gradient(45deg,
+      transparent,
+      transparent 1px,
+      rgba(255, 255, 255, 0.015) 1px,
+      rgba(255, 255, 255, 0.015) 2px);
+  min-height: 100vh;
+  padding: 0px 32px;
+  color: #ffffff;
+}
+
+/* Add this to your index.css or create services-timeline.css */
+
+.services-timeline {
+  min-height: 100vh;
+  padding: 80px 32px;
+  background-color: #000000;
+  background-image:
+    repeating-linear-gradient(45deg,
+      transparent,
+      transparent 1px,
+      rgba(255, 255, 255, 0.015) 1px,
+      rgba(255, 255, 255, 0.015) 2px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.services-header {
+  text-align: center;
+  margin-bottom: 80px;
+  z-index: 10;
+}
+
+.services-header h2 {
+  font-family: 'Newsreader', serif;
+  font-size: 3.5rem;
+  color: #ffffff;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.services-header p {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.2rem;
+  color: #999999;
+  letter-spacing: 0.05em;
+}
+
+/* Orbital container */
+.orbital-container {
+  position: relative;
+  width: 700px;
+  height: 700px;
+  margin: 0 auto;
+}
+
+/* Center hub */
+.center-hub {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  box-shadow:
+    0 0 40px rgba(255, 255, 255, 0.05),
+    inset 0 0 40px rgba(0, 0, 0, 0.5);
+}
+
+.hub-content {
+  text-align: center;
+  padding: 32px;
+}
+
+.hub-content h3 {
+  font-family: 'Newsreader', serif;
+  font-size: 2rem;
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+
+.hub-content p {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  color: #999999;
+  line-height: 1.6;
+}
+
+/* Orbital rings */
+.orbital-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.ring-1 {
+  width: 400px;
+  height: 400px;
+  animation: rotate 20s linear infinite;
+}
+
+.ring-2 {
+  width: 500px;
+  height: 500px;
+  animation: rotate 30s linear infinite reverse;
+}
+
+.ring-3 {
+  width: 600px;
+  height: 600px;
+  animation: rotate 40s linear infinite;
+}
+
+@keyframes pulseText {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0);
+  }
+
+  50% {
+    opacity: 0.8;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Service nodes */
+.service-node {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.node-icon {
+  width: 80px;
+  height: 80px;
+  background: #1a1a1a;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.service-node:hover .node-icon {
+  background: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+.service-node.active .node-icon {
+  background: #dc2626;
+  border-color: #dc2626;
+  box-shadow: 0 0 40px rgba(220, 38, 38, 0.6);
+}
+
+.node-label {
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: #999999;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.service-node:hover .node-label,
+.service-node.active .node-label {
+  opacity: 1;
+}
+
+/* Connection line */
+.connection-line {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 250px;
+  height: 2px;
+  background: linear-gradient(90deg, #dc2626, transparent);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .orbital-container {
+    width: 400px;
+    height: 400px;
+  }
+
+  .center-hub {
+    width: 200px;
+    height: 200px;
+  }
+
+  .hub-content h3 {
+    font-size: 1.5rem;
+  }
+
+  .hub-content p {
+    font-size: 0.8rem;
+  }
+
+  .service-node {
+    width: 60px;
+    height: 60px;
+  }
+
+  .node-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+
+  .ring-1 {
+    width: 250px;
+    height: 250px;
+  }
+
+  .ring-2 {
+    width: 300px;
+    height: 300px;
+  }
+
+  .ring-3 {
+    width: 350px;
+    height: 350px;
+  }
+}

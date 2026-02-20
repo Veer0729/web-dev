@@ -8,16 +8,17 @@ import FullScreenNav from "./components/Navigation/FullScreenNav";
 
 const App = () => {
   return (
-    <div>
-      {/* <Navbar/> */}
-      <FullScreenNav/>
-      {/* <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/work" element={<Work />} />
-        <Route path="/agency" element={<Agency />} />
-      </Routes> */}
+    <div className='overflow-x-hidden'>
+      <Navbar />
+      <FullScreenNav />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/agency' element={<Agency />} />
+        <Route path='/work' element={<Work />} />
+      </Routes>
     </div>
-  );
-};
+  )
+}
+
 
 export default App;
