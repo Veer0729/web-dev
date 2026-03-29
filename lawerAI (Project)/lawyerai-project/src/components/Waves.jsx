@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect } from 'react';
 
 /**
  * Perlin Noise Generator
@@ -56,17 +56,17 @@ class Noise {
 }
 
 const animationConfig = {
-    GRID_X_GAP: 10,
-    GRID_Y_GAP: 32,
-    GRID_WIDTH_OFFSET: 200,
+    GRID_X_GAP: 32,
+    GRID_Y_GAP: 50,
+    GRID_WIDTH_OFFSET: 80,
     GRID_HEIGHT_OFFSET: 30,
     WAVE_TIME_X_FACTOR: 0.0125,
     WAVE_NOISE_X_FACTOR: 0.002,
     WAVE_TIME_Y_FACTOR: 0.005,
     WAVE_NOISE_Y_FACTOR: 0.0015,
     WAVE_NOISE_MAGNITUDE: 12,
-    WAVE_AMPLITUDE_X: 32,
-    WAVE_AMPLITUDE_Y: 16,
+    WAVE_AMPLITUDE_X: 28,
+    WAVE_AMPLITUDE_Y: 14,
     MOUSE_INFLUENCE_RADIUS: 175,
     MOUSE_FALLOFF_FACTOR: 0.001,
     MOUSE_FORCE_FACTOR: 0.00065,
@@ -90,17 +90,8 @@ const Waves = ({ lineColor = '#FFFFFF', children }) => {
         bounding: null,
         animationFrameId: null,
         lineColor: lineColor,
+        dpr: 1,
     });
-
-    const moved = useCallback((point, withCursorForce = true) => {
-        const coords = {
-            x: point.x + point.wave.x + (withCursorForce ? point.cursor.x : 0),
-            y: point.y + point.wave.y + (withCursorForce ? point.cursor.y : 0)
-        };
-        coords.x = Math.round(coords.x * 10) / 10;
-        coords.y = Math.round(coords.y * 10) / 10;
-        return coords;
-    }, []);
 
     useEffect(() => {
         const state = animationState.current;
@@ -112,11 +103,16 @@ const Waves = ({ lineColor = '#FFFFFF', children }) => {
         const canvas = canvasRef.current;
         state.ctx = canvas.getContext('2d');
         const container = containerRef.current;
+        state.dpr = Math.min(window.devicePixelRatio || 1, 2);
 
         const setSize = () => {
             state.bounding = container.getBoundingClientRect();
-            canvas.width = state.bounding.width;
-            canvas.height = state.bounding.height;
+            const dpr = state.dpr;
+            canvas.width = state.bounding.width * dpr;
+            canvas.height = state.bounding.height * dpr;
+            canvas.style.width = state.bounding.width + 'px';
+            canvas.style.height = state.bounding.height + 'px';
+            state.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         };
 
         const setLines = () => {
@@ -157,37 +153,51 @@ const Waves = ({ lineColor = '#FFFFFF', children }) => {
                 CURSOR_DISPLACEMENT_STRENGTH, MAX_CURSOR_DISPLACEMENT
             } = animationConfig;
 
-            lines.forEach((points) => {
-                points.forEach((p) => {
+            const msx = mouse.sx;
+            const msy = mouse.sy;
+            const mvs = mouse.vs;
+            const ma = mouse.a;
+            const cosA = Math.cos(ma);
+            const sinA = Math.sin(ma);
+
+            for (let li = 0, ll = lines.length; li < ll; li++) {
+                const points = lines[li];
+                for (let pi = 0, pl = points.length; pi < pl; pi++) {
+                    const p = points[pi];
                     const noiseInputX = (p.x + time * WAVE_TIME_X_FACTOR) * WAVE_NOISE_X_FACTOR;
                     const noiseInputY = (p.y + time * WAVE_TIME_Y_FACTOR) * WAVE_NOISE_Y_FACTOR;
                     const move = noise.perlin2(noiseInputX, noiseInputY) * WAVE_NOISE_MAGNITUDE;
                     p.wave.x = Math.cos(move) * WAVE_AMPLITUDE_X;
                     p.wave.y = Math.sin(move) * WAVE_AMPLITUDE_Y;
 
-                    const dx = p.x - mouse.sx;
-                    const dy = p.y - mouse.sy;
-                    const d = Math.hypot(dx, dy);
-                    const influenceRadius = Math.max(MOUSE_INFLUENCE_RADIUS, mouse.vs);
+                    const dx = p.x - msx;
+                    const dy = p.y - msy;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    const influenceRadius = MOUSE_INFLUENCE_RADIUS > mvs ? MOUSE_INFLUENCE_RADIUS : mvs;
 
                     if (d < influenceRadius) {
                         const falloff = 1 - d / influenceRadius;
                         const force = Math.cos(d * MOUSE_FALLOFF_FACTOR) * falloff;
-                        const forceFactor = force * influenceRadius * mouse.vs * MOUSE_FORCE_FACTOR;
-                        p.cursor.vx += Math.cos(mouse.a) * forceFactor;
-                        p.cursor.vy += Math.sin(mouse.a) * forceFactor;
+                        const forceFactor = force * influenceRadius * mvs * MOUSE_FORCE_FACTOR;
+                        p.cursor.vx += cosA * forceFactor;
+                        p.cursor.vy += sinA * forceFactor;
                     }
 
-                    p.cursor.vx += (0 - p.cursor.x) * TENSION_STRENGTH;
-                    p.cursor.vy += (0 - p.cursor.y) * TENSION_STRENGTH;
+                    p.cursor.vx -= p.cursor.x * TENSION_STRENGTH;
+                    p.cursor.vy -= p.cursor.y * TENSION_STRENGTH;
                     p.cursor.vx *= FRICTION;
                     p.cursor.vy *= FRICTION;
                     p.cursor.x += p.cursor.vx * CURSOR_DISPLACEMENT_STRENGTH;
                     p.cursor.y += p.cursor.vy * CURSOR_DISPLACEMENT_STRENGTH;
-                    p.cursor.x = Math.min(MAX_CURSOR_DISPLACEMENT, Math.max(-MAX_CURSOR_DISPLACEMENT, p.cursor.x));
-                    p.cursor.y = Math.min(MAX_CURSOR_DISPLACEMENT, Math.max(-MAX_CURSOR_DISPLACEMENT, p.cursor.y));
-                });
-            });
+
+                    const cx = p.cursor.x;
+                    const cy = p.cursor.y;
+                    if (cx > MAX_CURSOR_DISPLACEMENT) p.cursor.x = MAX_CURSOR_DISPLACEMENT;
+                    else if (cx < -MAX_CURSOR_DISPLACEMENT) p.cursor.x = -MAX_CURSOR_DISPLACEMENT;
+                    if (cy > MAX_CURSOR_DISPLACEMENT) p.cursor.y = MAX_CURSOR_DISPLACEMENT;
+                    else if (cy < -MAX_CURSOR_DISPLACEMENT) p.cursor.y = -MAX_CURSOR_DISPLACEMENT;
+                }
+            }
         };
 
         const drawLines = () => {
@@ -196,20 +206,28 @@ const Waves = ({ lineColor = '#FFFFFF', children }) => {
             ctx.clearRect(0, 0, bounding.width, bounding.height);
             ctx.beginPath();
             ctx.strokeStyle = state.lineColor;
-            ctx.lineWidth = 0.5;
+            ctx.lineWidth = 1.5;
+            ctx.globalAlpha = 0.45;
 
-            lines.forEach((points) => {
-                let p1 = moved(points[0], false);
-                ctx.moveTo(p1.x, p1.y);
-                for (let i = 0; i < points.length - 1; i++) {
-                    const currentPoint = moved(points[i], true);
-                    const nextPoint = moved(points[i + 1], true);
-                    const xc = (currentPoint.x + nextPoint.x) / 2;
-                    const yc = (currentPoint.y + nextPoint.y) / 2;
-                    ctx.quadraticCurveTo(currentPoint.x, currentPoint.y, xc, yc);
+            for (let li = 0, ll = lines.length; li < ll; li++) {
+                const points = lines[li];
+                const p0 = points[0];
+                const startX = Math.round((p0.x + p0.wave.x) * 10) / 10;
+                const startY = Math.round((p0.y + p0.wave.y) * 10) / 10;
+                ctx.moveTo(startX, startY);
+
+                for (let i = 0, len = points.length - 1; i < len; i++) {
+                    const cp = points[i];
+                    const np = points[i + 1];
+                    const cpx = cp.x + cp.wave.x + cp.cursor.x;
+                    const cpy = cp.y + cp.wave.y + cp.cursor.y;
+                    const npx = np.x + np.wave.x + np.cursor.x;
+                    const npy = np.y + np.wave.y + np.cursor.y;
+                    ctx.quadraticCurveTo(cpx, cpy, (cpx + npx) * 0.5, (cpy + npy) * 0.5);
                 }
-            });
+            }
             ctx.stroke();
+            ctx.globalAlpha = 1;
         };
 
         const tick = (time) => {
@@ -276,7 +294,7 @@ const Waves = ({ lineColor = '#FFFFFF', children }) => {
             container.removeEventListener("touchmove", onTouchMove);
             cancelAnimationFrame(state.animationFrameId);
         };
-    }, [moved]);
+    }, []);
 
     return (
         <div

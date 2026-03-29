@@ -1,7 +1,11 @@
 import React from 'react'
 import { AnimatedNavigationTabs } from "@/components/animated-navigation-tags"
-import ServicesTimeline from './components/ServicesTimeline'
 import Waves from './components/Waves'
+import AboutSection from './components/AboutSection'
+import FeaturesSection from './components/FeaturesSection'
+import TestimonialsSection from './components/TestimonialsSection'
+import PricingSection from './components/PricingSection'
+import FAQFooterSection from './components/FAQFooterSection'
 
 const onepage = () => {
   const navItems = [
@@ -14,7 +18,7 @@ const onepage = () => {
   return (
     <div>
       <div id='main'>
-        <Waves lineColor="rgba(255, 255, 255, 0.35)">
+        <Waves lineColor="rgba(147, 140, 140, 0.8)">
           <div className='navbar'><AnimatedNavigationTabs items={navItems} />
           </div>
 
@@ -36,9 +40,12 @@ const onepage = () => {
           </div>
         </Waves>
       </div>
-      <div id='second-page'>
-        <ServicesTimeline />
-      </div>
+
+      <AboutSection />
+      <FeaturesSection />
+      <TestimonialsSection />
+      <PricingSection />
+      <FAQFooterSection />
     </div>
   )
 }
